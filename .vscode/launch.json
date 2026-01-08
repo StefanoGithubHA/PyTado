@@ -2,10 +2,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Example DEV",
+            "name": "Python Debugger: Example",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/examples/example_dev.py",
+            "program": "${workspaceFolder}/examples/example.py",
             "console": "integratedTerminal"
         }
     ]

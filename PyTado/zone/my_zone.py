@@ -34,6 +34,10 @@ class TadoZone:
     """Tado Zone data structure for my.tado.com."""
 
     zone_id: int
+    start_next_schedule: str | None = None
+    type_next_schedule: str | None = None
+    power_next_schedule: str | None = None
+    temperature_next_schedule: float | None = None
     current_temp: float | None = None
     current_temp_timestamp: str | None = None
     current_humidity: float | None = None
@@ -75,8 +79,28 @@ class TadoZone:
     @classmethod
     def from_data(cls, zone_id: int, data: dict[str, Any]) -> Self:
         """Handle update callbacks."""
-        _LOGGER.debug("Processing data from zone %d", zone_id)
+        _LOGGER.debug("Processing data %s from zone %d", data, zone_id)
+        print("Dati da elaborare: ", data)
         kwargs: dict[str, Any] = {}
+        # ********************************************************
+        # INIZIO CODICE FORK PER IL RITORNO DEL NEXTSCHEDULECHANGE
+        # ********************************************************
+        if "nextScheduleChange" in data:
+            next_schedule_date = data["nextScheduleChange"]
+
+            if "start" in next_schedule_date:
+                kwargs["start_next_schedule"] = data["nextScheduleChange"]["start"]
+
+            if "setting" in next_schedule_date:
+                setting = next_schedule_date["setting"]
+                kwargs["type_next_schedule"] = setting["type"]
+                kwargs["power_next_schedule"] = setting["power"]
+                if "temperature" in setting:
+                    kwargs["temperature_next_schedule"] = setting["temperature"]["celsius"]
+        # ******************************************************
+        # FINE CODICE FORK PER IL RITORNO DEL NEXTSCHEDULECHANGE
+        # ******************************************************
+
         if "sensorDataPoints" in data:
             sensor_data = data["sensorDataPoints"]
 

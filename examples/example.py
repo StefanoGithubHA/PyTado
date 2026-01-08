@@ -15,7 +15,7 @@ def main() -> None:
 
     print("Device activation status: ", tado.device_activation_status())
 
-    zones = tado.get_zones()
+    zones = tado.get_zone_state(1)
     print(zones)
 
 
